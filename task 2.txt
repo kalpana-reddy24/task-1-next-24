@@ -1,0 +1,55 @@
+import google.generativeai as genai
+import os
+import tkinter as tk
+from tkinter import font
+
+# Replace the API_KEY string with your actual API key
+API_KEY = "AIzaSyDoj5c3b3Vlp8MOXlQjmj8MP7yPK8Lu_Ns"
+
+genai.configure(api_key=API_KEY)
+model = genai.GenerativeModel('gemini-1.0-pro-latest')
+
+def generate_response():
+    user_input = entry.get()
+    response = model.generate_content(user_input)
+    text_area.config(state=tk.NORMAL)
+    text_area.delete("1.0", tk.END)
+    text_area.insert(tk.END, "RESPONSE FROM CHATBOT: " + response.text)
+    text_area.config(state=tk.DISABLED)
+
+def clear_input():
+    entry.delete(0, tk.END)
+
+root = tk.Tk()
+root.title("Chatbot GUI")
+root.configure(bg="black")
+root.geometry("800x600")  # Set the window size
+
+# Set custom font
+custom_font = font.Font(family="Arial", size=14)
+
+# Create a frame for the content
+content_frame = tk.Frame(root, bg="black")
+content_frame.pack(fill=tk.BOTH, expand=True)
+
+# Add a title
+title_label = tk.Label(content_frame, text="Welcome to the Chatbot!", fg="white", bg="black", font=("Arial", 20, "bold"))
+title_label.pack(pady=20)
+
+label = tk.Label(content_frame, text="Enter your prompt:", fg="white", bg="black", font=custom_font)
+label.pack(pady=10)
+
+entry = tk.Entry(content_frame, fg="white", bg="black", font=custom_font)
+entry.pack(pady=10)
+
+generate_button = tk.Button(content_frame, text="Generate Response", command=generate_response, fg="white", bg="gray", font=custom_font)
+generate_button.pack(pady=10)
+
+clear_button = tk.Button(content_frame, text="Clear Input", command=clear_input, fg="white", bg="gray", font=custom_font)
+clear_button.pack(pady=10)
+
+text_area = tk.Text(content_frame, fg="white", bg="black", font=custom_font, height=10, width=80)
+text_area.pack(pady=20)
+text_area.config(state=tk.DISABLED)
+
+root.mainloop()
